@@ -22,10 +22,19 @@ import com.furkandogan.exception.BaseException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler (value = {BaseException.class})
-	public ResponseEntity<ApiError<?>> handleBaseException (BaseException e , WebRequest request) {
+	@ExceptionHandler(value = {BaseException.class})
+	public ResponseEntity<ApiError<?>> handleBaseException(
+	        BaseException e,
+	        WebRequest request) {
 
-	return	ResponseEntity.badRequest().body(createApiError(e.getMessage(), request));
+	    HttpStatus status = e.getMessageType().getHttpStatus();
+
+	    return ResponseEntity
+	            .status(status)
+	            .body(createApiError(
+	                    e.getMessage(),
+	                    request,
+	                    status));
 	}
 	
 	@ExceptionHandler (value = {MethodArgumentNotValidException.class})
@@ -43,7 +52,7 @@ public class GlobalExceptionHandler {
 		}
 		}	
 		
-		return ResponseEntity.badRequest().body(createApiError(map, request));
+		return ResponseEntity.badRequest().body(createApiError(map, request,HttpStatus.BAD_REQUEST));
 		
 	}
 	
@@ -62,10 +71,10 @@ public class GlobalExceptionHandler {
 		return "";
 	}
 	
-	public <E> ApiError<E> createApiError (E message , WebRequest request) {
+	public <E> ApiError<E> createApiError (E message , WebRequest request ,HttpStatus status) {
 		ApiError<E> apiError = new ApiError<>();
-		 apiError.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		
+		apiError.setStatus(status.value());
+		// apiError.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value()); 
 		
 		Exception<E> exception = new Exception<>();
 		exception.setPath(request.getDescription(false).substring(4));

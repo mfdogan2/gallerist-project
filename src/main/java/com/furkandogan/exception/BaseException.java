@@ -1,10 +1,14 @@
 package com.furkandogan.exception;
 
+import lombok.Getter;
 
-
+@Getter
 public class BaseException extends RuntimeException {
-  
-	public BaseException (ErrorMessage errorMessage) {
-		super(errorMessage.prepareErrorMessage());
-	}
+
+    private final MessageType messageType;
+
+    public BaseException(ErrorMessage errorMessage) {
+        super(errorMessage.prepareErrorMessage());
+        this.messageType = errorMessage.getMessageType();
+    }
 }
