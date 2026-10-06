@@ -2,6 +2,7 @@ package com.furkandogan.service.ımpl;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,6 +22,7 @@ public class CurrencyRatesServiceImpl implements ICurrencyRatesService{
 	@Value("${evds.api.key}")
 	private String apiKey;
 
+	@Cacheable(value = "currencyRates", key = "#startDate + '-' + #endDate")
 	@Override
 	public CurrencyRatesResponse getCurrencyRates(String startDate, String endDate) {
 		
@@ -37,7 +39,7 @@ public class CurrencyRatesServiceImpl implements ICurrencyRatesService{
 		
 
 		try {
-			
+		
 			RestTemplate restTemplate  = new RestTemplate();
 			 ResponseEntity<CurrencyRatesResponse> response =	
 					 restTemplate.exchange(endpoint, HttpMethod.GET, httpEntity, new ParameterizedTypeReference <CurrencyRatesResponse>() {
