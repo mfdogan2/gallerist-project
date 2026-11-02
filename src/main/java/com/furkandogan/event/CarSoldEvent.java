@@ -14,4 +14,6 @@ public class CarSoldEvent {
     private Long customerId;
 
     private String eventType;
+    
+    private String eventId;
 }

@@ -1,6 +1,7 @@
 package com.furkandogan.controller;
 
 import org.springframework.http.ResponseEntity;
+import java.util.UUID;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +22,12 @@ public class RabbitMQTestController {
     @PostMapping("/test")
     public ResponseEntity<String> testRabbitMQ() {
 
-        CarSoldEvent event = new CarSoldEvent(
-                5L,
-                2L,
-                "CAR_SOLD"
-        );
+    	CarSoldEvent event = new CarSoldEvent(
+    		    5L,
+    		    2L,
+    		    "CAR_SOLD",
+    		    UUID.randomUUID().toString()
+    		);
 
         carSoldProducer.sendCarSoldEvent(event);
 

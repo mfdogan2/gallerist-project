@@ -1,6 +1,7 @@
 package com.furkandogan.service.ımpl;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.Optional;
@@ -247,11 +248,12 @@ public class SaledCarServiceImpl implements ISaledCarService{
 	    customerRepository.save(customer);
 
 	 // Satış olayını Spring içerisinde yayımla
-	 CarSoldEvent event = new CarSoldEvent(
-	         lockedCar.getId(),
-	         customer.getId(),
-	         "CAR_SOLD"
-	 );
+	    CarSoldEvent event = new CarSoldEvent(
+	    	    lockedCar.getId(),
+	    	    customer.getId(),
+	    	    "CAR_SOLD",
+	    	    UUID.randomUUID().toString()
+	    	);
 
 	 eventPublisher.publishEvent(event);
 
